@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Клуб Форма — фитнес-приложение</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef1f5;--card:#fff;--ink:#0f1b2d;--mute:#5d6b7e;--line:#dde3ea;--brand:#2447f5;--on:#fff;--warm:#ffb020;--ok:#16895a;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b121c;--card:#131d2b;--ink:#eaf0f7;--mute:#93a2b6;--line:#223044;--brand:#7b93ff;--on:#0b121c;--ok:#4cc790;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0b121c;--card:#131d2b;--ink:#eaf0f7;--mute:#93a2b6;--line:#223044;--brand:#7b93ff;--on:#0b121c;--ok:#4cc790;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.45 Manrope,system-ui,-apple-system,"Segoe UI",sans-serif}
+#app{max-width:480px;margin:0 auto;padding:16px 16px 96px}
+h1{font-size:26px;line-height:1.15;font-weight:800;margin:6px 0 14px;letter-spacing:-.01em}
+h2{font-size:17px;font-weight:800;margin:0 0 4px}
+p{margin:0}
+.mute{color:var(--mute)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:10px;margin-bottom:4px}
+.chip{flex:none;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 14px;font:inherit;font-weight:600;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:var(--on)}
+.tag{display:inline-block;font-size:12px;font-weight:600;color:var(--brand);border:1px solid currentColor;border-radius:6px;padding:1px 7px;margin-bottom:6px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+button{font:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.btn{background:var(--brand);color:var(--on);border:0;border-radius:12px;padding:11px 16px;font-weight:800}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.like{background:none;border:0;color:var(--mute);font-weight:600;padding:6px 0}
+.like[aria-pressed="true"]{color:var(--brand)}
+#tabs{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:5}
+#tabs div{max-width:480px;margin:0 auto;display:flex}
+#tabs button{flex:1;background:none;border:0;color:var(--mute);padding:9px 0 8px;font-size:11px;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:3px}
+#tabs button[aria-current="page"]{color:var(--brand)}
+svg.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.stat{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat .card{margin:0}
+.big{font-size:22px;font-weight:800}
+.ex{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:10px}
+.ex .n{width:34px;height:34px;border-radius:10px;background:var(--bg);display:grid;place-items:center;font-weight:800;flex:none}
+.ex.done .n{background:var(--ok);color:var(--on)}
+#sheet{position:fixed;inset:0;background:rgba(5,10,20,.55);display:none;align-items:flex-end;z-index:10}
+#sheet.open{display:flex}
+#sheet .pane{background:var(--bg);width:100%;max-width:480px;margin:0 auto;border-radius:22px 22px 0 0;padding:16px 16px calc(20px + env(safe-area-inset-bottom,0px));max-height:92%;overflow:auto}
+.demo{background:var(--card);border:1px solid var(--line);border-radius:16px;margin:10px 0}
+.demo svg{display:block;width:100%;height:auto}
+.bar{animation:lift 2.4s ease-in-out infinite;transform-box:fill-box}
+@keyframes lift{0%,100%{transform:translateY(0)}50%{transform:translateY(-46px)}}
+.timer{text-align:center;padding:12px}
+.timer .t{font-size:52px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.timer.rest .t{color:var(--warm)}
+.sets{display:flex;gap:8px;margin:8px 0 12px}
+.sets span{flex:1;text-align:center;border:1px solid var(--line);border-radius:10px;padding:7px 0;font-weight:800;color:var(--mute)}
+.sets span.on{background:var(--ok);border-color:var(--ok);color:var(--on)}
+.meal{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.meal:first-of-type{border-top:0}
+.chat{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.msg{max-width:82%;padding:9px 12px;border-radius:16px;background:var(--card);border:1px solid var(--line)}
+.msg.me{align-self:flex-end;background:var(--brand);border-color:var(--brand);color:var(--on)}
+.send{display:flex;gap:8px}
+input{flex:1;min-width:0;font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 12px}
+@media (prefers-reduced-motion:reduce){.bar{animation:none}}
+</style>
+</head>
+<body>
+<div id="app"><main id="view"></main></div>
+<nav id="tabs" aria-label="Разделы"><div id="tabrow"></div></nav>
+<div id="sheet" role="dialog" aria-modal="true"><div class="pane" id="pane"></div></div>
+
+<script>
+/* ---------- Данные (замените на запросы к вашему серверу) ---------- */
+var FEED=[
+ {tag:"Похудение",title:"Сушка за 8 недель",meta:"4 тренировки в неделю · 45 минут",by:"Тренер Алексей",likes:128},
+ {tag:"Набор массы",title:"Масса: три тяжёлых дня",meta:"Пн / Ср / Пт · базовые упражнения",by:"Тренер Алексей",likes:94},
+ {tag:"Новости",title:"В клубе новая зона для функционального тренинга",meta:"Открытие в эту субботу",by:"Администрация",likes:41},
+ {tag:"Новости",text:"Сегодня впервые присел со своим весом. Спасибо за советы по технике!",by:"Мария К.",likes:57},
+ {tag:"Похудение",title:"Ходьба и кардио для начинающих",meta:"30 минут, 5 раз в неделю",by:"Тренер Ольга",likes:73}
+];
+var DAYS={
+ "Пн":{title:"Грудь и трицепс",ex:[
+  {n:"Жим лёжа",m:"Грудь",sets:4,reps:"8–10",work:40,rest:90},
+  {n:"Жим гантелей на наклонной",m:"Верх груди",sets:3,reps:"10–12",work:40,rest:75},
+  {n:"Разгибания на блоке",m:"Трицепс",sets:3,reps:"12–15",work:35,rest:60}]},
+ "Ср":{title:"Спина и бицепс",ex:[
+  {n:"Тяга верхнего блока",m:"Широчайшие",sets:4,reps:"10–12",work:40,rest:75},
+  {n:"Тяга штанги в наклоне",m:"Спина",sets:4,reps:"8–10",work:40,rest:90},
+  {n:"Подъём штанги на бицепс",m:"Бицепс",sets:3,reps:"10–12",work:35,rest:60}]},
+ "Пт":{title:"Ноги и плечи",ex:[
+  {n:"Приседания со штангой",m:"Квадрицепс, ягодицы",sets:4,reps:"6–8",work:45,rest:120},
+  {n:"Румынская тяга",m:"Задняя поверхность бедра",sets:3,reps:"10",work:40,rest:90},
+  {n:"Жим гантелей сидя",m:"Плечи",sets:3,reps:"10–12",work:40,rest:75}]}
+};
+var MEALS={
+ loss:{kcal:1800,label:"Похудение",plans:[
+  [["Завтрак","Овсянка на воде, яйцо, яблоко",380],["Обед","Курица, гречка, овощной салат",520],["Перекус","Творог 5% и ягоды",220],["Ужин","Рыба на пару, брокколи",420]],
+  [["Завтрак","Омлет из 2 яиц с овощами",340],["Обед","Индейка, бурый рис, огурцы",540],["Перекус","Греческий йогурт, орехи",230],["Ужин","Тушёные овощи, нежирная говядина",430]],
+  [["Завтрак","Сырники без сахара",360],["Обед","Суп с курицей, цельнозерновой хлеб",500],["Перекус","Кефир, груша",200],["Ужин","Запечённая рыба, салат",430]]]},
+ gain:{kcal:3000,label:"Набор массы",plans:[
+  [["Завтрак","Овсянка на молоке, 3 яйца, банан",750],["Обед","Говядина, рис, овощи",900],["Перекус","Творог, мёд, орехи",450],["Ужин","Паста с курицей, сыр",850]],
+  [["Завтрак","Блины с творогом, сок",720],["Обед","Курица, картофель, салат",880],["Перекус","Бутерброды с арахисовой пастой",480],["Ужин","Лосось, рис, авокадо",900]],
+  [["Завтрак","Омлет из 4 яиц, тост, сыр",740],["Обед","Плов с говядиной",920],["Перекус","Гейнер или молоко с бананом",440],["Ужин","Индейка, макароны, овощи",880]]]}
+};
+var ICON={
+ feed:'<path d="M4 5h16M4 12h16M4 19h10"/>',
+ train:'<path d="M3 9v6M6 7v10M18 7v10M21 9v6M6 12h12"/>',
+ food:'<path d="M6 3v7a3 3 0 0 0 3 3v8M9 3v7M12 3v7a3 3 0 0 1-3 3M18 3c-2 2-3 4-3 7s1 3 3 3v8"/>',
+ chat:'<path d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-7l-5 4v-4H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/>',
+ me:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/>'
+};
+var TABS=[["feed","Лента"],["train","Тренировки"],["food","Питание"],["chat","Сообщения"],["me","Кабинет"]];
+
+/* ---------- Состояние ---------- */
+function load(k,d){try{var v=localStorage.getItem("fit:"+k);return v?JSON.parse(v):d}catch(e){return d}}
+function save(k,v){try{localStorage.setItem("fit:"+k,JSON.stringify(v))}catch(e){}}
+var S={
+ tab:"feed",filter:"Все",liked:{},
+ day:"Пн",done:{},
+ goal:load("goal","loss"),mday:0,
+ weight:load("weight",82.5),
+ chat:load("chat",[{me:0,t:"Здравствуйте! Задайте вопрос о тренировках или питании — отвечу в течение дня."}])
+};
+var USER={since:new Date(2025,10,20),end:new Date(2026,11,20)};
+var $=function(s){return document.querySelector(s)};
+var fmt=function(d){return d.toLocaleDateString("ru-RU")};
+var svg=function(n){return '<svg class="i" viewBox="0 0 24 24" aria-hidden="true">'+ICON[n]+'</svg>'};
+var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})};
+
+/* ---------- Нижнее меню ---------- */
+function renderTabs(){
+ $("#tabrow").innerHTML=TABS.map(function(t){
+  return '<button data-tab="'+t[0]+'"'+(S.tab===t[0]?' aria-current="page"':'')+'>'+svg(t[0])+t[1]+'</button>'}).join("");
+ document.querySelectorAll("#tabrow button").forEach(function(b){
+  b.onclick=function(){S.tab=b.dataset.tab;render();window.scrollTo(0,0)}});
+}
+
+/* ---------- Лента ---------- */
+function vFeed(){
+ var f=["Все","Новости"];
+ var items=FEED.map(function(p,i){return{p:p,i:i}}).filter(function(o){return S.filter==="Все"||o.p.tag===S.filter});
+ return '<h1>Лента</h1><div class="chips">'+f.map(function(x){
+  return '<button class="chip" data-f="'+x+'" aria-pressed="'+(S.filter===x)+'">'+x+'</button>'}).join("")+'</div>'+
+ items.map(function(o){var p=o.p,liked=S.liked[o.i];
+  return '<article class="card"><span class="tag">'+p.tag+'</span>'+
+   (p.title?'<h2>'+esc(p.title)+'</h2>':'')+
+   (p.text?'<p>'+esc(p.text)+'</p>':'')+
+   (p.meta?'<p class="mute">'+esc(p.meta)+'</p>':'')+
+   '<div class="row" style="margin-top:8px"><span class="mute">'+esc(p.by)+'</span>'+
+   '<button class="like" data-like="'+o.i+'" aria-pressed="'+!!liked+'">'+(liked?"♥":"♡")+' '+(p.likes+(liked?1:0))+'</button></div></article>'}).join("");
+}
+function bindFeed(){
+ document.querySelectorAll("[data-f]").forEach(function(b){b.onclick=function(){S.filter=b.dataset.f;render()}});
+ document.querySelectorAll("[data-like]").forEach(function(b){b.onclick=function(){var i=b.dataset.like;S.liked[i]=!S.liked[i];render()}});
+}
+
+/* ---------- Тренировки ---------- */
+function vTrain(){
+ var d=DAYS[S.day];
+ return '<h1>Тренировки</h1><div class="chips">'+Object.keys(DAYS).map(function(k){
+  return '<button class="chip" data-day="'+k+'" aria-pressed="'+(S.day===k)+'">'+k+'</button>'}).join("")+'</div>'+
+ '<div class="card"><h2>'+d.title+'</h2><p class="mute">'+d.ex.length+' упражнения · нажмите на упражнение, чтобы открыть технику и таймер</p></div>'+
+ d.ex.map(function(e,i){var c=S.done[S.day+i]||0;
+  return '<button class="ex'+(c>=e.sets?' done':'')+'" data-ex="'+i+'"><span class="n">'+(c>=e.sets?"✓":i+1)+'</span><span style="flex:1"><b>'+e.n+'</b><br><span class="mute">'+e.m+' · '+e.sets+' × '+e.reps+' · отдых '+e.rest+' с</span></span><span class="mute">'+c+'/'+e.sets+'</span></button>'}).join("");
+}
+function bindTrain(){
+ document.querySelectorAll("[data-day]").forEach(function(b){b.onclick=function(){S.day=b.dataset.day;render()}});
+ document.querySelectorAll("[data-ex]").forEach(function(b){b.onclick=function(){openEx(+b.dataset.ex)}});
+}
+
+/* Анимация-заглушка. Для настоящей техники подставьте <img src="жим.gif"> */
+function demo(){
+ return '<div class="demo"><svg viewBox="0 0 320 150" role="img" aria-label="Схема выполнения упражнения">'+
+ '<rect x="40" y="128" width="240" height="6" rx="3" fill="currentColor" opacity=".15"/>'+
+ '<g stroke="currentColor" stroke-width="5" stroke-linecap="round" fill="none" opacity=".75"><circle cx="160" cy="88" r="9" fill="currentColor" stroke="none"/><path d="M160 98v22M160 104l-22 10M160 104l22 10"/></g>'+
+ '<g class="bar" style="color:var(--brand)"><rect x="90" y="56" width="140" height="5" rx="2.5" fill="currentColor"/><rect x="82" y="44" width="10" height="29" rx="3" fill="currentColor"/><rect x="228" y="44" width="10" height="29" rx="3" fill="currentColor"/></g></svg></div>';
+}
+
+/* Таймер: подход → отдых */
+var T={id:null,phase:"idle",left:0,ex:null};
+function stopT(){clearInterval(T.id);T.id=null;T.phase="idle"}
+function paintT(){
+ var box=$("#timer");if(!box)return;
+ var e=DAYS[S.day].ex[T.ex],c=S.done[S.day+T.ex]||0;
+ box.className="card timer"+(T.phase==="rest"?" rest":"");
+ var m=Math.floor(T.left/60),s=T.left%60;
+ $("#tt").textContent=(T.phase==="idle"?"Готов":(T.phase==="work"?"Подход ":"Отдых "))+(T.phase==="idle"?"":("0"+m).slice(-2)+":"+("0"+s).slice(-2));
+ $("#tb").textContent=T.phase==="idle"?(c>=e.sets?"Начать заново":"Начать подход "+(c+1)):"Остановить";
+ $("#sets").innerHTML=Array.from({length:e.sets},function(_,i){return '<span class="'+(i<c?"on":"")+'">'+(i+1)+'</span>'}).join("");
+}
+function tick(){
+ var e=DAYS[S.day].ex[T.ex];
+ T.left--;
+ if(T.left<=0){
+  if(T.phase==="work"){S.done[S.day+T.ex]=(S.done[S.day+T.ex]||0)+1;
+   if(navigator.vibrate)try{navigator.vibrate(200)}catch(x){}
+   if(S.done[S.day+T.ex]>=e.sets){stopT()}else{T.phase="rest";T.left=e.rest}}
+  else{stopT();if(navigator.vibrate)try{navigator.vibrate([100,80,100])}catch(x){}}
+ }
+ paintT();
+}
+function openEx(i){
+ var e=DAYS[S.day].ex[i];stopT();T.ex=i;
+ $("#pane").innerHTML='<div class="row"><div><h2>'+e.n+'</h2><span class="tag">'+e.m+'</span></div><button class="btn ghost" id="close">Закрыть</button></div>'+
+ demo()+
+ '<p class="mute">'+e.sets+' подхода по '+e.reps+' повторений · время подхода '+e.work+' с · отдых '+e.rest+' с</p>'+
+ '<div class="sets" id="sets"></div><div class="card timer" id="timer"><div class="t" id="tt"></div></div>'+
+ '<button class="btn" id="tb" style="width:100%"></button>';
+ $("#sheet").classList.add("open");
+ $("#close").onclick=closeEx;
+ $("#tb").onclick=function(){
+  if(T.phase!=="idle"){stopT();paintT();return}
+  if((S.done[S.day+i]||0)>=e.sets)S.done[S.day+i]=0;
+  T.phase="work";T.left=e.work;T.id=setInterval(tick,1000);paintT();
+ };
+ paintT();
+}
+function closeEx(){stopT();$("#sheet").classList.remove("open");render()}
+$("#sheet").onclick=function(ev){if(ev.target.id==="sheet")closeEx()};
+
+/* ---------- Питание ---------- */
+function vFood(){
+ var g=MEALS[S.goal],dn=["Пн","Вт","Ср","Чт","Пт","Сб","Вс"],plan=g.plans[S.mday%3];
+ var total=plan.reduce(function(a,m){return a+m[2]},0);
+ return '<h1>Питание</h1><div class="chips">'+["loss","gain"].map(function(k){
+  return '<button class="chip" data-goal="'+k+'" aria-pressed="'+(S.goal===k)+'">Цель: '+MEALS[k].label.toLowerCase()+'</button>'}).join("")+'</div>'+
+ '<div class="chips">'+dn.map(function(d,i){return '<button class="chip" data-md="'+i+'" aria-pressed="'+(S.mday===i)+'">'+d+'</button>'}).join("")+'</div>'+
+ '<div class="card"><div class="row"><h2>План на день</h2><b>'+total+' из '+g.kcal+' ккал</b></div>'+
+ plan.map(function(m){return '<div class="meal"><div><b>'+m[0]+'</b><br><span class="mute">'+m[1]+'</span></div><span class="mute">'+m[2]+' ккал</span></div>'}).join("")+'</div>';
+}
+function bindFood(){
+ document.querySelectorAll("[data-goal]").forEach(function(b){b.onclick=function(){S.goal=b.dataset.goal;save("goal",S.goal);render()}});
+ document.querySelectorAll("[data-md]").forEach(function(b){b.onclick=function(){S.mday=+b.dataset.md;render()}});
+}
+
+/* ---------- Сообщения ---------- */
+var REPLIES=["Спасибо за вопрос! Посмотрю вашу программу и отвечу подробнее вечером.","Хороший вопрос. Начните с меньшего веса и следите за техникой — это важнее.","Добавьте воды и сон не меньше 7 часов — восстановление влияет на результат."];
+function vChat(){
+ return '<h1>Сообщения</h1><div class="card"><b>Тренер Алексей</b><br><span class="mute">Отвечает на вопросы по тренировкам и питанию</span></div>'+
+ '<div class="chat" id="log">'+S.chat.map(function(m){return '<div class="msg'+(m.me?" me":"")+'">'+esc(m.t)+'</div>'}).join("")+'</div>'+
+ '<div class="send"><input id="inp" placeholder="Ваш вопрос тренеру" aria-label="Сообщение"><button class="btn" id="go">Отправить</button></div>';
+}
+function bindChat(){
+ function send(){var v=$("#inp").value.trim();if(!v)return;
+  S.chat.push({me:1,t:v});save("chat",S.chat);render();
+  setTimeout(function(){S.chat.push({me:0,t:REPLIES[S.chat.length%REPLIES.length]});save("chat",S.chat);if(S.tab==="chat")render()},1200)}
+ $("#go").onclick=send;
+ $("#inp").onkeydown=function(e){if(e.key==="Enter")send()};
+ window.scrollTo(0,document.body.scrollHeight);
+}
+
+/* ---------- Личный кабинет ---------- */
+function vMe(){
+ var now=new Date(),used=Math.floor((now-USER.since)/864e5),left=Math.max(0,Math.ceil((USER.end-now)/864e5));
+ return '<h1>Личный кабинет</h1>'+
+ '<div class="card"><span class="tag">Подписка активна</span><div class="big">до '+fmt(USER.end)+'</div><p class="mute">Продлится автоматически · осталось '+left+' дн.</p></div>'+
+ '<div class="stat"><div class="card"><p class="mute">В клубе с</p><div class="big">'+fmt(USER.since)+'</div></div>'+
+ '<div class="card"><p class="mute">Вы с нами</p><div class="big">'+used+' дн.</div></div></div>'+
+ '<div class="card" style="margin-top:12px"><h2>Ваш вес</h2><p class="mute" style="margin-bottom:8px">Сейчас: <b id="wv">'+S.weight+'</b> кг</p>'+
+ '<div class="send"><input id="w" type="number" step="0.1" min="30" max="300" value="'+S.weight+'" aria-label="Вес в килограммах"><button class="btn" id="ws">Сохранить</button></div></div>';
+}
+function bindMe(){
+ $("#ws").onclick=function(){var v=parseFloat($("#w").value);if(v>=30&&v<=300){S.weight=v;save("weight",v);$("#wv").textContent=v}};
+}
+
+/* ---------- Роутер ---------- */
+var V={feed:[vFeed,bindFeed],train:[vTrain,bindTrain],food:[vFood,bindFood],chat:[vChat,bindChat],me:[vMe,bindMe]};
+function render(){
+ $("#view").innerHTML=V[S.tab][0]();V[S.tab][1]();renderTabs();
+}
+render();
+</script>
+</body>
+</html>
