@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Fintess workplace</title>
+<title>Клуб Форма — фитнес-приложение</title>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#eef1f5;--card:#fff;--ink:#0f1b2d;--mute:#5d6b7e;--line:#dde3ea;--brand:#2447f5;--on:#fff;--warm:#ffb020;--ok:#16895a;--bad:#d63a45;
@@ -126,18 +126,30 @@ var FEED=[
 /* План подходов: "~" = разминка, формат вес x повторения * число подходов */
 function parse(t){var o=[];t.split(",").forEach(function(p){var w=p[0]==="~";if(w)p=p.slice(1);var m=p.split("*"),a=m[0].split("x");for(var i=0;i<(+m[1]||1);i++)o.push({kg:+a[0],r:+a[1],w:w})});return o}
 var DAYS={
- "Пн":{title:"Грудь и трицепс",ex:[
-  {n:"Жим лёжа",m:"Грудь",video:"videos/bench-press.mp4",plan:"~20x12,~50x10,~60x8,70x6*5",work:40,rest:120},
-  {n:"Жим гантелей на наклонной",m:"Верх груди · кг на каждую гантель",plan:"~14x12,22x10*3",work:40,rest:90},
-  {n:"Разгибания на блоке",m:"Трицепс",plan:"~15x15,25x12*3",work:35,rest:60}]},
+ "Пн":{title:"Ноги, плечи и бицепс",ex:[
+  {n:"Гиперэкстензия",m:"Поясница, ягодицы",video:"videos/hyperextension.mp4",plan:"0x18*3",work:40,rest:60},
+  {n:"Присед",m:"Квадрицепс, ягодицы",video:"videos/squat.mp4",plan:"~20x12,~50x10,~60x8,70x8*6",work:45,rest:120},
+  {n:"Жим гантелей сидя",m:"Плечи · кг на каждую гантель",plan:"15x20*5",work:45,rest:90},
+  {n:"Разгибание ног сидя",m:"Квадрицепс",plan:"61x15*5",work:40,rest:60},
+  {n:"Отведения на задние дельты лёжа",m:"Задние дельты · кг на каждую гантель",plan:"7.5x15*4",work:40,rest:60},
+  {n:"Гудмонинг",m:"Задняя поверхность бедра, поясница",plan:"~20x12,40x10*3",work:40,rest:90},
+  {n:"Сгибание рук с EZ-грифом стоя",m:"Бицепс",plan:"~15x12,35x10*4",work:40,rest:60},
+  {n:"Подъём гантелей на бицепс стоя с пронацией",m:"Бицепс · кг на каждую гантель",plan:"10x15*3",work:40,rest:60}]},
  "Ср":{title:"Спина и бицепс",ex:[
-  {n:"Тяга верхнего блока",m:"Широчайшие",plan:"~30x12,~45x10,55x10*3",work:40,rest:90},
-  {n:"Тяга штанги в наклоне",m:"Спина",plan:"~20x12,~40x10,60x8*4",work:40,rest:120},
-  {n:"Подъём штанги на бицепс",m:"Бицепс",plan:"~15x12,30x10*3",work:35,rest:60}]},
- "Пт":{title:"Ноги и плечи",ex:[
-  {n:"Приседания со штангой",m:"Квадрицепс, ягодицы",plan:"~20x12,~60x10,~80x8,100x6*5",work:45,rest:120},
-  {n:"Румынская тяга",m:"Задняя поверхность бедра",plan:"~40x12,70x10*3",work:40,rest:90},
-  {n:"Жим гантелей сидя",m:"Плечи · кг на каждую гантель",plan:"~8x12,16x10*3",work:40,rest:90}]}
+  {n:"Гиперэкстензия",m:"Поясница, ягодицы",video:"videos/hyperextension.mp4",plan:"0x18*3",work:40,rest:60},
+  {n:"Подтягивания",m:"Широчайшие, бицепс",plan:"~0x10,5x10*4",work:40,rest:90},
+  {n:"Становая тяга",m:"Спина, ягодицы, ноги",plan:"~20x12,~50x10,80x8*6",work:45,rest:120},
+  {n:"Горизонтальная тяга в блоке широким хватом",m:"Середина спины",plan:"43x12*5",work:40,rest:90},
+  {n:"Шраги с гантелями",m:"Трапеции · кг на каждую гантель",plan:"~15x15,20x12*3",work:40,rest:60},
+  {n:"Сгибание рук с EZ-грифом стоя",m:"Бицепс",plan:"~15x12,25x15*3",work:40,rest:60},
+  {n:"Молоты",m:"Бицепс, предплечья · кг на каждую гантель",plan:"10x12*3",work:40,rest:60}]},
+ "Пт":{title:"Грудь и трицепс",ex:[
+  {n:"Гиперэкстензия",m:"Поясница, ягодицы",video:"videos/hyperextension.mp4",plan:"~0x12,25x10*3",work:40,rest:60},
+  {n:"Жим штанги",m:"Грудь",video:"videos/bench-press.mp4",plan:"~20x12,~50x10,65x6*6",work:45,rest:120},
+  {n:"Жим гантелей лёжа",m:"Грудь · кг на каждую гантель",plan:"~15x12,27.5x12*3",work:40,rest:90},
+  {n:"Сведение рук в тренажёре",m:"Грудь",plan:"~52x12,63x12*3",work:40,rest:60},
+  {n:"Французский жим с EZ-грифом",m:"Трицепс",plan:"~10x12,30x12*3",work:40,rest:60},
+  {n:"Разгибание рук V-образной рукояткой",m:"Трицепс",plan:"37x25*3",work:45,rest:60}]}
 };
 Object.keys(DAYS).forEach(function(k){DAYS[k].ex.forEach(function(e){e.p=parse(e.plan);e.sets=e.p.length})});
 /* Блюдо: "название;граммовка;ккал" */
@@ -194,7 +206,7 @@ var ME_NAME="Сергей Филиппов";
 FEED.forEach(function(p,i){p.id="f"+i});
 FEED[1].c=[{by:"Александр Рылов",t:"Мощно! Следующая цель — 130."}];
 FEED[2].c=[{by:"Денис Сошников",t:"Поздравляю, красавчик!"},{by:"Тренер Андрей Корнеев",t:"Отличная работа, не забывай про разминку."}];
-S.posts=load("posts",[]);S.comm=load("comm",{});S.open={};S.goalW=load("goalw",78);
+S.posts=load("posts",[]);S.comm=load("comm",{});S.open={};S.wopen={};S.goalW=load("goalw",78);
 S.wlog=load("wlog",null);
 if(!S.wlog){var n0=new Date(),w0=[86.0,85.2,84.5,83.8,83.0,S.weight];S.wlog=w0.map(function(v,i){var d=new Date(n0);d.setDate(n0.getDate()-7*(5-i));return{d:dk(d),w:v}})}
 S.hist=load("hist2",null);
@@ -250,16 +262,23 @@ function vTrain(){
  var d=DAYS[S.day],wd=wdate(S.day),k=dk(wd),fin=S.hist[k],fut=k>dk(new Date()),st=fin===1?"on":(fin==="m"?"ms":(k>=dk(new Date())?"pl":"ms")),STL={pl:"Запланирована",on:"Выполнена",ms:"Пропущена"};
  var btn=fut?'<button class="btn" id="fin" style="width:100%" disabled>Эта тренировка ещё впереди</button>':
   '<div class="seg"><button class="btn '+(st==="on"?"ok":"ghost")+'" id="fin" data-v="1" aria-pressed="'+(st==="on")+'">Тренировка выполнена'+(st==="on"?" ✓":"")+'</button><button class="btn '+(st==="ms"?"bad":"ghost")+'" id="mis" data-v="m" aria-pressed="'+(st==="ms")+'">Тренировка пропущена'+(st==="ms"?" ✓":"")+'</button></div>';
+ var open=!!S.wopen[S.day];
+ var tog=function(){return '<button class="btn ghost" data-tog="1" aria-expanded="'+open+'" style="width:100%;margin-bottom:10px">'+(open?"Свернуть тренировку ▴":"Развернуть тренировку ▾")+'</button>'};
+ var nw=d.ex.reduce(function(a,e){return a+e.p.filter(function(x){return!x.w}).length},0);
+ var dn=d.ex.filter(function(e,i){return (S.done[S.day+i]||0)>=e.sets}).length;
+ var list=open?d.ex.map(function(e,i){var c=S.done[S.day+i]||0;
+  return '<button class="ex'+(c>=e.sets?' done':'')+'" data-ex="'+i+'"><span class="n">'+(c>=e.sets?"✓":i+1)+'</span><span style="flex:1"><b>'+e.n+'</b><br><span class="mute">'+e.m+' · '+sumr(e)+'</span></span><span class="mute">'+c+'/'+e.sets+'</span></button>'}).join("")+tog():"";
  return '<h1>Тренировки</h1><div class="chips">'+Object.keys(DAYS).map(function(x){
   return '<button class="chip" data-day="'+x+'" aria-pressed="'+(S.day===x)+'">'+x+'</button>'}).join("")+'</div>'+
- '<div class="card"><span class="tag st-'+st+'">'+STL[st]+'</span><h2>'+d.title+'</h2><p class="mute">'+S.day+', '+fmt(wd).slice(0,5)+' · '+d.ex.length+' упражнения · нажмите на упражнение, чтобы открыть технику, веса и таймер'+(st==="ms"?'<br><b style="color:var(--bad)">Тренировка пропущена.</b> Если вы всё же выполнили её, нажмите «Тренировка выполнена».':'')+'</p></div>'+
- d.ex.map(function(e,i){var c=S.done[S.day+i]||0,mx=Math.max.apply(null,e.p.map(function(x){return x.kg}));
-  return '<button class="ex'+(c>=e.sets?' done':'')+'" data-ex="'+i+'"><span class="n">'+(c>=e.sets?"✓":i+1)+'</span><span style="flex:1"><b>'+e.n+'</b><br><span class="mute">'+e.m+' · рабочий вес '+mx+' кг</span></span><span class="mute">'+c+'/'+e.sets+'</span></button>'}).join("")+
- btn+'<div style="height:12px"></div>'+cal();
+ '<div class="card"><span class="tag st-'+st+'">'+STL[st]+'</span><h2>'+d.title+'</h2><p class="mute">'+S.day+', '+fmt(wd).slice(0,5)+' · '+d.ex.length+' '+pl(d.ex.length,"упражнение","упражнения","упражнений")+' · '+nw+' '+pl(nw,"рабочий подход","рабочих подхода","рабочих подходов")+(dn?' · готово '+dn+' из '+d.ex.length:'')+
+ (open?'<br>Нажмите на упражнение, чтобы открыть технику, веса и таймер.':'')+
+ (st==="ms"?'<br><b style="color:var(--bad)">Тренировка пропущена.</b> Если вы всё же выполнили её, нажмите «Тренировка выполнена».':'')+'</p></div>'+
+ tog()+list+btn+'<div style="height:12px"></div>'+cal();
 }
 function bindTrain(){
  document.querySelectorAll("[data-day]").forEach(function(b){b.onclick=function(){S.day=b.dataset.day;render()}});
  document.querySelectorAll("[data-ex]").forEach(function(b){b.onclick=function(){openEx(+b.dataset.ex)}});
+ document.querySelectorAll("[data-tog]").forEach(function(b){b.onclick=function(){S.wopen[S.day]=!S.wopen[S.day];render()}});
  document.querySelectorAll("#fin,#mis").forEach(function(b){b.onclick=function(){var k=dk(wdate(S.day)),v=b.dataset.v==="1"?1:"m";if(S.hist[k]===v)delete S.hist[k];else S.hist[k]=v;save("hist2",S.hist);DAYS[S.day].ex.forEach(function(e,i){delete S.done[S.day+i]});render()}});
 }
 
@@ -271,6 +290,9 @@ function demo(){
  '<g class="bar" style="color:var(--brand)"><rect x="90" y="56" width="140" height="5" rx="2.5" fill="currentColor"/><rect x="82" y="44" width="10" height="29" rx="3" fill="currentColor"/><rect x="228" y="44" width="10" height="29" rx="3" fill="currentColor"/></g></svg></div>';
 }
 
+function pl(n,a,b,c){var m=n%10,h=n%100;return m===1&&h!==11?a:(m>=2&&m<=4&&(h<12||h>14))?b:c}
+function kgl(x){return x.kg===0?"свой вес":String(x.kg).replace(".",",")+" кг"}
+function sumr(e){var nw=e.p.filter(function(x){return!x.w}).length,l=e.p[e.p.length-1];return nw+" × "+l.r+" · "+kgl(l)}
 /* Видео-инструкция: если у упражнения есть поле video и файл найден, показываем его, иначе схему-заглушку */
 function vid(e){
  if(!e.video)return demo();
@@ -290,7 +312,7 @@ function paintT(){
  $("#tb").textContent=T.phase==="idle"?(c>=e.sets?"Начать заново":"Начать подход "+(c+1)):"Остановить";
  $("#sets").innerHTML=e.p.map(function(x,i){
   var cls=i<c?" on":(i===c&&T.phase==="work"?" cur":"");
-  return '<div class="srow'+cls+'"><span>'+(i<c?"✓":i+1)+'</span><span style="flex:1"><b>'+x.kg+' кг × '+x.r+'</b> <span class="mute">'+(x.w?"разминка":"рабочий")+'</span></span><span class="mute">'+(i<e.sets-1?"отдых "+fm(e.rest+15*i):"")+'</span></div>'}).join("");
+  return '<div class="srow'+cls+'"><span>'+(i<c?"✓":i+1)+'</span><span style="flex:1"><b>'+kgl(x)+' × '+x.r+'</b> <span class="mute">'+(x.w?"разминка":"рабочий")+'</span></span><span class="mute">'+(i<e.sets-1?"отдых "+fm(e.rest+15*i):"")+'</span></div>'}).join("");
 }
 function tick(){
  var e=DAYS[S.day].ex[T.ex];
@@ -306,7 +328,7 @@ function openEx(i){
  var e=DAYS[S.day].ex[i];stopT();T.ex=i;
  $("#pane").innerHTML='<div class="row"><div><h2>'+e.n+'</h2><span class="tag">'+e.m+'</span></div><button class="btn ghost" id="close">Закрыть</button></div>'+
  vid(e)+
- '<p class="mute">'+e.sets+' подходов · время подхода '+e.work+' с · отдых между подходами '+fm(e.rest)+', дальше +15 с после каждого подхода</p>'+
+ '<p class="mute">'+e.sets+' '+pl(e.sets,"подход","подхода","подходов")+' · время подхода '+e.work+' с · отдых между подходами '+fm(e.rest)+', дальше +15 с после каждого подхода</p>'+
  '<div id="sets" style="margin:10px 0"></div><div class="card timer" id="timer"><div class="t" id="tt"></div></div>'+
  '<button class="btn" id="tb" style="width:100%"></button>'+'<div class="card" style="margin-top:12px"><h2>Заметка тренеру</h2><p class="mute" style="margin-bottom:8px">Если вес или повторения отличались от плана, напишите.</p><div class="send"><input id="nt" placeholder="Например: 72,5 кг × 5, последний подход тяжело" aria-label="Заметка"><button class="btn" id="nts">Отправить</button></div></div>';
  $("#sheet").classList.add("open");
