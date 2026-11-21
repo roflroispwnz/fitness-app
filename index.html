@@ -116,7 +116,15 @@ input{flex:1;min-width:0;font:inherit;color:var(--ink);background:var(--card);bo
 #sets .srow{flex-wrap:wrap}
 #set-add{margin-bottom:10px}
 #set-list{margin:12px 0}#set-list summary{cursor:pointer;padding:12px 0;font-weight:800}
-#timer h3{text-align:center;margin:0 0 14px}.rings{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;text-align:center;font-size:.82rem;color:var(--mute)}
+.rest-form{display:flex;align-items:end;flex-wrap:wrap;gap:8px}
+.rest-form .metric-values{margin:0;text-align:center}
+.rest-form .wheel-frame{background:linear-gradient(transparent 33.33%,var(--line) 33.33% 66.66%,transparent 66.66%)}
+.rest-form .wheel-frame:focus-within{outline-color:var(--brand)}
+.rest-status{margin-top:6px}
+.rest-status:empty{display:none}
+#timer h3{text-align:center;margin:0 0 14px}.rings{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:6px;text-align:center;font-size:.82rem;color:var(--mute)}
+.timer-actions{display:flex;flex-wrap:wrap;gap:8px}
+.timer-actions .btn{flex:1 1 auto}
 .rings b{--accent:var(--brand);--fill:100%;display:grid;place-items:center;aspect-ratio:1;width:min(100%,88px);margin:0 auto 6px;border-radius:50%;color:var(--ink);font-size:clamp(1rem,5vw,1.35rem);font-variant-numeric:tabular-nums;background:radial-gradient(closest-side,var(--card) 86%,transparent 89%),conic-gradient(var(--accent) var(--fill),var(--line) 0)}
 #done-value{--accent:var(--ok)}
 #workout-plan summary{cursor:pointer;padding:12px 0;font-weight:700}
@@ -201,6 +209,8 @@ h2{font-size:18px;letter-spacing:-.01em}
 #tabs button{border-radius:18px;padding:8px 0 6px;font-size:10.5px;font-weight:700;transition:.2s}
 #tabs button[aria-current="page"]{color:#fff;background:var(--grad);box-shadow:var(--glow)}
 #tabs button[aria-current="page"] svg{transform:translateY(-1px) scale(1.08)}
+#app:has(.chat-send){padding-bottom:calc(160px + env(safe-area-inset-bottom,0px))}
+.chat-send{position:fixed;z-index:4;left:0;right:0;bottom:calc(88px + env(safe-area-inset-bottom,0px));width:calc(100% - 32px);max-width:448px;margin-inline:auto;padding-block:8px;background:var(--bg)}
 /* exercises */
 .ex{border-radius:20px;padding:14px;box-shadow:var(--sh);transition:transform .15s,border-color .2s}
 .ex:active{transform:scale(.985)}
@@ -340,29 +350,29 @@ var FEED=[
 function parse(t){var o=[];t.split(",").forEach(function(p){var w=p[0]==="~";if(w)p=p.slice(1);var m=p.split("*"),a=m[0].split("x");for(var i=0;i<(+m[1]||1);i++)o.push({kg:+a[0],r:+a[1],w:w})});return o}
 var DAYS={
  "Пн":{title:"Ноги, плечи и бицепс",ex:[
-  {n:"Гиперэкстензия",m:"Поясница, ягодицы",video:"videos/hyperextension.mp4",plan:"0x18*3",work:40,rest:60},
-  {n:"Присед",m:"Квадрицепс, ягодицы",video:"videos/squat.mp4",plan:"~20x12,~50x10,~60x8,70x8*6",work:45,rest:120},
-  {n:"Жим гантелей сидя",m:"Плечи · кг на каждую гантель",video:"videos/dumbbell-press-seated.mp4",plan:"15x20*5",work:45,rest:90},
-  {n:"Разгибание ног сидя",m:"Квадрицепс",video:"videos/leg-extension.mp4",plan:"61x15*5",work:40,rest:60},
-  {n:"Отведения на задние дельты лёжа",m:"Задние дельты · кг на каждую гантель",plan:"7.5x15*4",work:40,rest:60},
-  {n:"Гудмонинг",m:"Задняя поверхность бедра, поясница",plan:"~20x12,40x10*3",work:40,rest:90},
-  {n:"Сгибание рук с EZ-грифом стоя",m:"Бицепс",plan:"~15x12,35x10*4",work:40,rest:60},
-  {n:"Подъём гантелей на бицепс стоя с пронацией",m:"Бицепс · кг на каждую гантель",plan:"10x15*3",work:40,rest:60}]},
+  {n:"Гиперэкстензия",m:"Поясница, ягодицы",video:"videos/hyperextension.mp4",plan:"0x18*3"},
+  {n:"Присед",m:"Квадрицепс, ягодицы",video:"videos/squat.mp4",plan:"~20x12,~50x10,~60x8,70x8*6"},
+  {n:"Жим гантелей сидя",m:"Плечи · кг на каждую гантель",video:"videos/dumbbell-press-seated.mp4",plan:"15x20*5"},
+  {n:"Разгибание ног сидя",m:"Квадрицепс",video:"videos/leg-extension.mp4",plan:"61x15*5"},
+  {n:"Отведения на задние дельты лёжа",m:"Задние дельты · кг на каждую гантель",plan:"7.5x15*4"},
+  {n:"Гудмонинг",m:"Задняя поверхность бедра, поясница",plan:"~20x12,40x10*3"},
+  {n:"Сгибание рук с EZ-грифом стоя",m:"Бицепс",plan:"~15x12,35x10*4"},
+  {n:"Подъём гантелей на бицепс стоя с пронацией",m:"Бицепс · кг на каждую гантель",plan:"10x15*3"}]},
  "Ср":{title:"Спина и бицепс",ex:[
-  {n:"Гиперэкстензия",m:"Поясница, ягодицы",video:"videos/hyperextension.mp4",plan:"0x18*3",work:40,rest:60},
-  {n:"Подтягивания",m:"Широчайшие, бицепс",plan:"~0x10,5x10*4",work:40,rest:90},
-  {n:"Становая тяга",m:"Спина, ягодицы, ноги",plan:"~20x12,~50x10,80x8*6",work:45,rest:120},
-  {n:"Горизонтальная тяга в блоке широким хватом",m:"Середина спины",plan:"43x12*5",work:40,rest:90},
-  {n:"Шраги с гантелями",m:"Трапеции · кг на каждую гантель",plan:"~15x15,20x12*3",work:40,rest:60},
-  {n:"Сгибание рук с EZ-грифом стоя",m:"Бицепс",plan:"~15x12,25x15*3",work:40,rest:60},
-  {n:"Молоты",m:"Бицепс, предплечья · кг на каждую гантель",plan:"10x12*3",work:40,rest:60}]},
+  {n:"Гиперэкстензия",m:"Поясница, ягодицы",video:"videos/hyperextension.mp4",plan:"0x18*3"},
+  {n:"Подтягивания",m:"Широчайшие, бицепс",plan:"~0x10,5x10*4"},
+  {n:"Становая тяга",m:"Спина, ягодицы, ноги",plan:"~20x12,~50x10,80x8*6"},
+  {n:"Горизонтальная тяга в блоке широким хватом",m:"Середина спины",plan:"43x12*5"},
+  {n:"Шраги с гантелями",m:"Трапеции · кг на каждую гантель",plan:"~15x15,20x12*3"},
+  {n:"Сгибание рук с EZ-грифом стоя",m:"Бицепс",plan:"~15x12,25x15*3"},
+  {n:"Молоты",m:"Бицепс, предплечья · кг на каждую гантель",plan:"10x12*3"}]},
  "Пт":{title:"Грудь и трицепс",ex:[
-  {n:"Гиперэкстензия",m:"Поясница, ягодицы",video:"videos/hyperextension.mp4",plan:"~0x12,25x10*3",work:40,rest:60},
-  {n:"Жим штанги",m:"Грудь",video:"videos/bench-press.mp4",plan:"~20x12,~50x10,65x6*6",work:45,rest:120},
-  {n:"Жим гантелей лёжа",m:"Грудь · кг на каждую гантель",plan:"~15x12,27.5x12*3",work:40,rest:90},
-  {n:"Сведение рук в тренажёре",m:"Грудь",plan:"~52x12,63x12*3",work:40,rest:60},
-  {n:"Французский жим с EZ-грифом",m:"Трицепс",plan:"~10x12,30x12*3",work:40,rest:60},
-  {n:"Разгибание рук V-образной рукояткой",m:"Трицепс",plan:"37x25*3",work:45,rest:60}]}
+  {n:"Гиперэкстензия",m:"Поясница, ягодицы",video:"videos/hyperextension.mp4",plan:"~0x12,25x10*3"},
+  {n:"Жим штанги",m:"Грудь",video:"videos/bench-press.mp4",plan:"~20x12,~50x10,65x6*6"},
+  {n:"Жим гантелей лёжа",m:"Грудь · кг на каждую гантель",plan:"~15x12,27.5x12*3"},
+  {n:"Сведение рук в тренажёре",m:"Грудь",plan:"~52x12,63x12*3"},
+  {n:"Французский жим с EZ-грифом",m:"Трицепс",plan:"~10x12,30x12*3"},
+  {n:"Разгибание рук V-образной рукояткой",m:"Трицепс",plan:"37x25*3"}]}
 };
 Object.keys(DAYS).forEach(function(k){DAYS[k].ex.forEach(function(e){e.p=load("sets:"+k+":"+e.n,parse(e.plan));e.sets=e.p.length})});
 /* Блюдо: "название;граммовка;ккал" */
@@ -526,7 +536,7 @@ function bindTrain(){
   f.exercise.setCustomValidity(name?"":"Введите название упражнения");
   if(!exerciseForm.reportValidity())return;
   var sets=Array.from({length:f.count.valueAsNumber},function(){return {kg:f.kg.valueAsNumber,r:f.reps.valueAsNumber,w:false}});
-  d.ex.push({n:name,m:"Упражнение",work:40,rest:60,sets:sets.length,p:sets});
+  d.ex.push({n:name,m:"Упражнение",sets:sets.length,p:sets});
   S.wopen[S.day]=true;persistWorkouts();render();
   document.querySelector('[data-ex="'+(d.ex.length-1)+'"]').focus();
  }
@@ -719,56 +729,75 @@ function vid(e){
  if(!e.video)return demo();
  return '<div class="demo"><video src="'+e.video+'" autoplay muted loop playsinline controls preload="metadata" aria-label="Видео: '+e.n+'"></video></div>';
 }
-/* Таймер: подход → отдых. Отдых после подхода k: базовый + 15 с × (k−1) */
-var T={id:null,phase:"idle",left:0,ex:null};
+/* Таймер отдыха между подходами */
+var DEFAULT_REST_SECONDS=120;
+var WORK_REST_INCREMENT_SECONDS=15;
+var T={id:null,phase:"idle",left:0,restDuration:0,ex:null};
 function stopT(){clearInterval(T.id);T.id=null;T.phase="idle"}
 function fm(n){return Math.floor(n/60)+":"+("0"+n%60).slice(-2)}
 function buzz(p){if(navigator.vibrate)try{navigator.vibrate(p)}catch(x){}}
-function restAfter(e,completed){return e.rest+15*(completed-1)}
+function restSeconds(e){return e.restSeconds??DEFAULT_REST_SECONDS}
+function restAfter(e,index){
+ if(e.p[index].w)return 0;
+ var previousWorkSets=e.p.slice(0,index).filter(function(set){return !set.w}).length;
+ return restSeconds(e)+previousWorkSets*WORK_REST_INCREMENT_SECONDS;
+}
 function paintT(){
  var box=$("#timer");if(!box)return;
  var e=workouts[S.day].ex[T.ex],c=S.done[S.day+T.ex]||0;
  var rest=T.phase==="rest", finished=e.sets>0 && c===e.sets;
- var next=e.p[c], duration=rest?restAfter(e,c):e.work;
- var seconds=T.phase==="idle"?(next?duration:0):T.left;
+ var next=e.p[c], editing=!$("#set-form").hidden;
  $("#phase-title").textContent=finished?"Упражнение выполнено":next?((rest?"Далее · подход ":"Подход ")+(c+1)+" из "+e.sets+" · "+kgl(next)):"Подходов пока нет";
  $("#rep-value").textContent=next?next.r:"—";
- $("#time-value").textContent=fm(seconds);
- $("#time-label").textContent=rest?"Отдых":"Время подхода";
- $("#time-value").style.setProperty("--accent",rest?"var(--ok)":"var(--brand)");
- $("#time-value").style.setProperty("--fill",(duration?seconds/duration*100:0)+"%");
+ $("#rest-clock").hidden=!rest;
+ if(rest){
+  var clock=$("#time-value");
+  var accent=T.left<=30?"var(--bad)":T.left<=60?"var(--warm)":"var(--ok)";
+  clock.textContent=fm(T.left);
+  clock.style.setProperty("--accent",accent);
+  clock.style.setProperty("--fill",(T.left/T.restDuration*100)+"%");
+ }
  $("#done-value").textContent=c+"/"+e.sets;
  $("#done-value").style.setProperty("--fill",(e.sets?c/e.sets*100:0)+"%");
- $("#tb").textContent=T.phase==="idle"?(e.sets && c>=e.sets?"Начать заново":"Старт"):(T.id===null?"Продолжить":"Пауза");
- $("#tb").disabled=!e.sets;
- if(!e.sets)$("#tb").textContent="Добавьте первый подход";
+ $("#tb").textContent=rest?(T.id===null?"Продолжить":"Пауза"):finished?"Начать заново":next?"Завершить подход":"Добавьте первый подход";
+ $("#tb").disabled=!e.sets || editing;
+ $("#skip-rest").hidden=!rest;
+ $("#skip-rest").disabled=editing;
  $("#set-add").disabled=T.id!==null;
  $("#sets").innerHTML=e.p.map(function(x,i){
-  var cls=i<c?" on":(i===c&&T.phase==="work"?" cur":"");
-  return '<div class="srow'+cls+'"><span>'+(i<c?"✓":i+1)+'</span><span style="flex:1"><b>'+kgl(x)+' × '+x.r+'</b> <span class="mute">'+(x.w?"разминка":"рабочий")+'</span></span><span class="mute">'+(i<e.sets-1?"отдых "+fm(restAfter(e,i+1)):"")+'</span><button class="chip" data-edit="'+i+'" aria-label="Изменить подход '+(i+1)+'" '+(T.phase==="idle"?"":"disabled")+'>Изменить</button></div>'}).join("");
+  var cls=i<c?" on":(i===c&&!rest?" cur":"");
+  return '<div class="srow'+cls+'"><span>'+(i<c?"✓":i+1)+'</span><span style="flex:1"><b>'+kgl(x)+' × '+x.r+'</b> <span class="mute">'+(x.w?"разминка":"рабочий")+'</span></span><span class="mute">'+(!x.w && i<e.sets-1?"отдых "+fm(rest && i===c-1?T.restDuration:restAfter(e,i)):"")+'</span><button class="chip" data-edit="'+i+'" aria-label="Изменить подход '+(i+1)+'" '+(T.phase==="idle"?"":"disabled")+'>Изменить</button></div>'}).join("");
 }
 function tick(){
- var e=workouts[S.day].ex[T.ex];
  T.left--;
- if(T.left<=0){
-  if(T.phase==="work"){var c=(S.done[S.day+T.ex]||0)+1;S.done[S.day+T.ex]=c;buzz(200);
-   if(c>=e.sets){stopT()}else{T.phase="rest";T.left=restAfter(e,c)}}
-  else{T.phase="work";T.left=e.work;buzz([100,80,100])}
- }
+ if(T.left<=0){stopT();buzz([100,80,100])}
  paintT();
 }
 function openEx(i){
  var e=workouts[S.day].ex[i];stopT();T.ex=i;
+ var baseRest=restSeconds(e);
  $("#pane").innerHTML='<div class="row"><div><h2>'+esc(e.n)+'</h2><span class="tag">'+e.m+'</span></div><button class="btn ghost" id="close">Закрыть</button></div>'+
  vid(e)+
- '<details id="set-list"><summary>План подходов · <span id="set-count">'+e.sets+' '+pl(e.sets,"подход","подхода","подходов")+'</span></summary><p class="mute">Время подхода '+e.work+' с · отдых между подходами '+fm(e.rest)+', дальше +15 с после каждого подхода</p>'+
- '<div id="sets" style="margin:10px 0"></div><button type="button" class="btn ghost" id="set-add">Добавить подход</button><form class="card" id="set-form" hidden></form></details><section class="card" id="timer"><h3 id="phase-title"></h3><div class="rings"><div><b id="rep-value"></b>Повторения</div><div><b id="time-value"></b><span id="time-label"></span></div><div><b id="done-value"></b>Выполнено</div></div></section>'+
- '<button class="btn" id="tb" style="width:100%"></button>'+'<div class="card" style="margin-top:12px"><h2>Заметка тренеру</h2><p class="mute" style="margin-bottom:8px">Если вес или повторения отличались от плана, напишите.</p><div class="send"><input id="nt" placeholder="Например: 72,5 кг × 5, последний подход тяжело" aria-label="Заметка"><button class="btn" id="nts">Отправить</button></div></div>';
+ '<details id="set-list"><summary>План подходов · <span id="set-count">'+e.sets+' '+pl(e.sets,"подход","подхода","подходов")+'</span></summary>'+
+ '<p class="mute" id="rest-help">После первого рабочего подхода отдых равен базовому, далее +'+WORK_REST_INCREMENT_SECONDS+' с за каждый рабочий подход, также вы можете настраивать отдых самостоятельно.</p>'+
+ '<form id="rest-form" class="rest-form" aria-label="Базовый отдых" aria-describedby="rest-help"><div class="metric-values">'+wheelField("minutes","мин",Math.floor(baseRest/60),0,59)+wheelField("seconds","сек",baseRest%60,0,59)+'</div><button class="btn ghost">Сохранить отдых</button></form><p id="rest-status" class="mute rest-status" role="status"></p>'+
+ '<div id="sets" style="margin:10px 0"></div><button type="button" class="btn ghost" id="set-add">Добавить подход</button><form class="card" id="set-form" hidden></form></details><section class="card" id="timer"><h3 id="phase-title"></h3><div class="rings"><div><b id="rep-value"></b>Повторения</div><div id="rest-clock" hidden><b id="time-value"></b>Отдых</div><div><b id="done-value"></b>Выполнено</div></div></section>'+
+ '<div class="timer-actions"><button class="btn" id="tb"></button><button class="btn ghost" id="skip-rest" hidden>Закончить отдых</button></div>'+'<div class="card" style="margin-top:12px"><h2>Заметка тренеру</h2><p class="mute" style="margin-bottom:8px">Если вес или повторения отличались от плана, напишите.</p><div class="send"><input id="nt" placeholder="Например: 72,5 кг × 5, последний подход тяжело" aria-label="Заметка"><button class="btn" id="nts">Отправить</button></div></div>';
  $("#sheet").classList.add("open");
  $("#close").onclick=closeEx;
  var form=$("#set-form");
+ var restForm=$("#rest-form"), restStatus=$("#rest-status");
+ restForm.onsubmit=function(event){
+  event.preventDefault();
+  var values=readRest(), seconds=values.minutes*60+values.seconds;
+  if(!Number.isSafeInteger(seconds) || seconds<1){restStatus.textContent="Выберите время отдыха больше 0:00.";return}
+  e.restSeconds=seconds;
+  persistWorkouts();paintT();
+  restStatus.textContent="Отдых сохранён: "+fm(seconds)+(T.phase==="rest"?" со следующего перерыва.":".");
+ };
  var list=$("#set-list"), listKey="set-list:"+S.day+":"+e.n;
  list.open=load(listKey,false);
+ var readRest=bindWheels(restForm);
  list.ontoggle=function(){
   save(listKey,list.open);
   if(!list.open && !form.hidden){form.hidden=true;paintT()}
@@ -777,10 +806,11 @@ function openEx(i){
   var adding=index===e.p.length;
   if(adding?T.id!==null:T.phase!=="idle")return;
   var value=e.p[index] || e.p[index-1] || {kg:0,r:12,w:false};
-  form.innerHTML='<div id="set-fields"><h3>'+(adding?"Новый подход":"Подход "+(index+1))+'</h3>'+
+  form.innerHTML='<div id="set-fields"><h3>'+(adding?"Добавить подходы":"Подход "+(index+1))+'</h3>'+
    '<label>Вес, кг (0 — свой вес)<input name="kg" type="number" required min="0" step="any"></label>'+
    '<label>Повторения<input name="reps" type="number" required min="1" step="1"></label>'+
    '<label>Тип подхода<select name="kind"><option value="work">Рабочий</option><option value="warm">Разминка</option></select></label>'+
+   (adding?'<label>Количество подходов<input name="quantity" type="number" required min="1" max="100" step="1" value="1"></label>':'')+
    '<div><button type="button" id="set-save" class="btn">Сохранить</button> <button type="button" class="chip" id="set-cancel">Отмена</button> '+
    (adding?"":'<button type="button" class="chip" id="set-delete">Удалить</button>')+'</div></div>'+
    (adding?'':'<div id="set-delete-question" hidden><p>Удалить подход '+(index+1)+'?</p><button type="button" class="btn bad" id="set-delete-yes">Да, удалить</button> <button type="button" class="chip" id="set-delete-no">Отмена</button></div>');
@@ -789,6 +819,7 @@ function openEx(i){
   form.elements.reps.value=value.r;
   form.elements.kind.value=value.w?"warm":"work";
   $("#tb").disabled=true;
+  $("#skip-rest").disabled=true;
   form.elements.kg.focus();
   function finish(){
    e.sets=e.p.length;
@@ -799,7 +830,18 @@ function openEx(i){
   }
   function saveSet(){
    if(form.hidden || $("#set-fields").hidden || !form.reportValidity())return;
-   e.p[index]={kg:form.elements.kg.valueAsNumber,r:form.elements.reps.valueAsNumber,w:form.elements.kind.value==="warm"};
+   var set={kg:form.elements.kg.valueAsNumber,r:form.elements.reps.valueAsNumber,w:form.elements.kind.value==="warm"};
+   if(adding){
+    var insertAt=index;
+    if(set.w){
+     var firstPending=S.done[S.day+i]||0;
+     var firstWork=e.p.findIndex(function(item,position){return position>=firstPending && !item.w});
+     if(firstWork!==-1)insertAt=firstWork;
+    }
+    var quantity=form.elements.quantity.valueAsNumber;
+    var added=Array.from({length:quantity},function(){return {...set}});
+    e.p.splice(insertAt,0,...added);
+   }else e.p[index]=set;
    finish();
   }
   $("#set-save").onclick=saveSet;
@@ -836,7 +878,7 @@ function openEx(i){
  $("#nts").onclick=function(){var v=$("#nt").value.trim();if(!v)return;S.chat.push({me:1,t:"«"+e.n+"»: "+v});save("chat",S.chat);$("#nt").value="";$("#nts").textContent="Отправлено ✓";
   setTimeout(function(){S.chat.push({me:0,t:"Принял, посмотрю и дам рекомендации."});save("chat",S.chat);if(S.tab==="chat")render()},1200)};
  $("#tb").onclick=function(){
-  if(T.phase!=="idle"){
+  if(T.phase==="rest"){
    if(T.id===null){
     T.id=setInterval(tick,1000);
    }else{
@@ -846,9 +888,19 @@ function openEx(i){
    paintT();
    return;
   }
-  if((S.done[S.day+i]||0)>=e.sets)S.done[S.day+i]=0;
-  T.phase="work";T.left=e.work;T.id=setInterval(tick,1000);paintT();
+  var key=S.day+i, completed=S.done[key]||0;
+  if(completed>=e.sets){
+   S.done[key]=0;
+  }else{
+   S.done[key]=completed+1;
+   if(S.done[key]<e.sets && !e.p[completed].w){
+    T.phase="rest";T.restDuration=restAfter(e,completed);T.left=T.restDuration;
+    T.id=setInterval(tick,1000);
+   }
+  }
+  paintT();
  };
+ $("#skip-rest").onclick=function(){stopT();paintT()};
  paintT();
 }
 function closeEx(){stopT();$("#sheet").classList.remove("open");render()}
@@ -949,7 +1001,7 @@ var REPLIES=["Спасибо за вопрос! Посмотрю вашу про
 function vChat(){
  return '<h1>Сообщения</h1><div class="card row" style="justify-content:flex-start;gap:12px"><img class="av" src="'+AV+'" alt="Тренер Андрей Корнеев"><div><b>Тренер Андрей Корнеев</b><br><span class="mute">Отвечает на вопросы по тренировкам и питанию</span></div></div>'+
  '<div class="chat" id="log">'+S.chat.map(function(m){return m.me?'<div class="msg me">'+esc(m.t)+'</div>':'<div class="mrow"><img class="av s" src="'+AV+'" alt=""><div class="msg">'+esc(m.t)+'</div></div>'}).join("")+'</div>'+
- '<div class="send"><input id="inp" placeholder="Ваш вопрос тренеру" aria-label="Сообщение"><button class="btn" id="go">Отправить</button></div>';
+ '<div class="send chat-send"><input id="inp" placeholder="Ваш вопрос тренеру" aria-label="Сообщение"><button class="btn" id="go">Отправить</button></div>';
 }
 function bindChat(){
  function send(){var v=$("#inp").value.trim();if(!v)return;
@@ -982,49 +1034,55 @@ function recordWeight(value){
  else S.wlog.push({d:today,w:value});
  save("wlog",S.wlog);
 }
-function bodyForm(first){
- var grams=Math.round(S.weight*1000);
- function field(name,label,value,min,max){
+function wheelField(name,label,value,min,max){
   var rows="";
   for(var n=min;n<=max;n++)rows+='<div class="wheel-number" data-number="'+n+'">'+n+'</div>';
-  return '<div><div class="wheel-frame"><div class="metric-wheel" role="spinbutton" tabindex="0" aria-label="'+label+'" aria-valuemin="'+min+'" aria-valuemax="'+max+'" aria-valuenow="'+value+'" data-field="'+name+'">'+rows+'</div></div><small>'+label+'</small></div>';
-
- }
+  if(value>max)rows+='<div class="wheel-number" data-number="'+value+'">'+value+'</div>';
+  return '<div><div class="wheel-frame"><div class="metric-wheel" role="spinbutton" tabindex="0" aria-label="'+label+'" aria-valuemin="'+min+'" aria-valuemax="'+Math.max(max,value)+'" aria-valuenow="'+value+'" data-field="'+name+'">'+rows+'</div></div><small>'+label+'</small></div>';
+}
+function bodyForm(first){
+ var grams=Math.round(S.weight*1000);
  function card(title,fields){return '<div class="metric-card"><strong>'+title+'</strong><div class="metric-values">'+fields+'</div></div>'}
- return '<form class="body-form">'+card("Ваш вес",field("kg","кг",Math.floor(grams/1000),30,300)+field("grams","г",grams%1000,0,999))+
- card("Ваш рост",field("height","см",bodyProfile?bodyProfile.height:175,50,250))+
- card("Ваш возраст",field("age","лет",bodyProfile?bodyProfile.age:25,1,120))+
+ return '<form class="body-form">'+card("Ваш вес",wheelField("kg","кг",Math.floor(grams/1000),30,300)+wheelField("grams","г",grams%1000,0,999))+
+ card("Ваш рост",wheelField("height","см",bodyProfile?bodyProfile.height:175,50,250))+
+ card("Ваш возраст",wheelField("age","лет",bodyProfile?bodyProfile.age:25,1,120))+
  '<p class="wheel-error" role="status"></p><button type="button" class="btn">'+(first?"Продолжить":"Сохранить")+'</button></form>';
 }
-function bindBody(form,complete){
+function bindWheels(form){
  var wheels=Array.from(form.querySelectorAll(".metric-wheel")),step=36;
+ function position(w){return Math.max(0,Math.min(w.children.length-1,Math.round(w.scrollTop/step)))}
  function read(w){
-  var value=Number(w.getAttribute("aria-valuemin"))+Math.round(w.scrollTop/step);
-  return Math.max(Number(w.getAttribute("aria-valuemin")),Math.min(Number(w.getAttribute("aria-valuemax")),value));
+  return Number(w.children[position(w)].dataset.number);
  }
- function select(w,value){
-  var min=Number(w.getAttribute("aria-valuemin")),max=Number(w.getAttribute("aria-valuemax"));
-  value=Math.max(min,Math.min(max,value));
-  w.scrollTop=(value-min)*step;
-  w.setAttribute("aria-valuenow",value);
+ function select(w,index){
+  index=Math.max(0,Math.min(w.children.length-1,index));
+  w.scrollTop=index*step;
+  w.setAttribute("aria-valuenow",w.children[index].dataset.number);
  }
  function align(){
   if(form.getClientRects().length && wheels[0].clientHeight)
-   wheels.forEach(function(w){select(w,Number(w.getAttribute("aria-valuenow")))});
+   wheels.forEach(function(w){select(w,Array.from(w.children).findIndex(function(row){return row.dataset.number===w.getAttribute("aria-valuenow")}))});
  }
  wheels.forEach(function(w){
   w.onscroll=function(){if(w.clientHeight)w.setAttribute("aria-valuenow",read(w))};
-  w.onclick=function(event){var row=event.target.closest("[data-number]");if(row)select(w,Number(row.dataset.number))};
+  w.onclick=function(event){var row=event.target.closest("[data-number]");if(row)select(w,Array.from(w.children).indexOf(row))};
   w.onkeydown=function(event){
    var deltas={ArrowUp:-1,ArrowDown:1,PageUp:-10,PageDown:10};
-   if(event.key in deltas){event.preventDefault();select(w,read(w)+deltas[event.key])}
+   if(event.key in deltas){event.preventDefault();select(w,position(w)+deltas[event.key])}
   };
  });
  align();
  var details=form.closest("details");
  if(details)details.addEventListener("toggle",function(){if(details.open)align()});
- function submit(){
+ return function(){
   var values={};wheels.forEach(function(w){values[w.dataset.field]=read(w)});
+  return values;
+ };
+}
+function bindBody(form,complete){
+ var readBody=bindWheels(form);
+ function submit(){
+  var values=readBody();
   var weight=(1000*values.kg+values.grams)/1000;
   if(weight>300){form.querySelector(".wheel-error").textContent="При весе 300 кг выберите 0 г.";return}
   bodyProfile={height:values.height,age:values.age};
@@ -1036,14 +1094,12 @@ function bindBody(form,complete){
 }
 function vMe(){
  var now=new Date(),used=Math.floor((now-USER.since)/864e5),left=Math.max(0,Math.ceil((USER.end-now)/864e5));
- var warn=left<=REMIND?'<div class="card"><span class="tag fill">Скоро конец подписки</span><p>Осталось '+left+' дн. Продлите заранее.</p><div style="margin-top:10px"><button class="btn" data-renew="1">Продлить на 30 дней</button></div></div>':"";
- return '<h1>Личный кабинет</h1>'+'<div class="card row" style="justify-content:flex-start;gap:14px"><img class="av" style="width:72px;height:72px" src="'+AVS[ME_NAME]+'" alt="'+ME_NAME+'"><div><div class="big">'+ME_NAME+'</div><p class="mute">Участник клуба</p></div></div>'+
- '<div class="card"><h2>Параметры тела</h2><p>'+S.weight.toLocaleString("ru-RU")+' кг · '+(bodyProfile?bodyProfile.height+' см · '+bodyProfile.age+' '+pl(bodyProfile.age,"год","года","лет"):"")+'</p><details id="profile-edit"><summary>Изменить параметры</summary>'+bodyForm(false)+'</details></div>'+warn+
- '<div class="card"><span class="tag">Подписка активна</span><div class="big">до '+fmt(USER.end)+'</div><p class="mute">Продлится автоматически · осталось '+left+' дн.</p></div>'+
- '<div class="stat"><div class="card"><p class="mute">В клубе с</p><div class="big">'+fmt(USER.since)+'</div></div>'+
- '<div class="card"><p class="mute">Вы с нами</p><div class="big">'+used+' дн.</div></div></div>'+'<button class="btn ghost" id="out" style="width:100%;margin-top:12px">Выйти</button>';
+ return '<h1>Личный кабинет</h1>'+'<div class="card row" style="justify-content:flex-start;gap:14px"><img class="av" style="width:72px;height:72px" src="'+AVS[ME_NAME]+'" alt="'+ME_NAME+'"><div><div class="big">'+ME_NAME+'</div><p class="mute">Участник клуба</p><p class="mute">В клубе с '+fmt(USER.since)+'</p></div></div>'+
+ '<div class="card"><h2>Параметры тела</h2><p>'+S.weight.toLocaleString("ru-RU")+' кг · '+(bodyProfile?bodyProfile.height+' см · '+bodyProfile.age+' '+pl(bodyProfile.age,"год","года","лет"):"")+'</p><details id="profile-edit"><summary>Изменить параметры</summary>'+bodyForm(false)+'</details></div>'+
+ '<div class="card"><span class="tag">Подписка активна</span><div class="big">до '+fmt(USER.end)+'</div><p class="mute">Продлится автоматически · осталось '+left+' дн.</p><p class="mute">Вы с нами '+used+' дн.</p></div>'+
+ '<button class="btn ghost" id="out" style="width:100%;margin-top:12px">Выйти</button>';
 }
-function bindMe(){bindBody($("#profile-edit form"),render);bindRenew();$("#out").onclick=function(){window.logout()}}
+function bindMe(){bindBody($("#profile-edit form"),render);$("#out").onclick=function(){window.logout()}}
 
 /* ---------- Роутер ---------- */
 var guideTitles=["Упражнения","Спортивное питание","Состав и таблица калорийности продуктов","Энциклопедия"];
