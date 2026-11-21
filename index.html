@@ -251,6 +251,13 @@ th,td{padding:10px 6px;border-bottom:1px solid var(--line)}
 /* login */
 #login::before{content:"";position:absolute;inset:0;background:radial-gradient(500px 360px at 85% 8%,rgba(155,77,255,.5),transparent 70%),radial-gradient(420px 320px at 0 100%,rgba(255,95,162,.35),transparent 70%),linear-gradient(180deg,rgba(11,10,30,.25),rgba(11,10,30,.7))}
 #login.profile-step::before{display:none}
+#login.profile-step{background:#0d0c18;color:#f1f0ff}
+.body-panel{padding:24px 16px 20px}
+.body-panel h1{margin:0 0 18px}
+.body-panel>p{margin:0 0 12px;text-align:center}
+.body-panel .metric-card{min-height:196px;display:flex;flex-direction:column;justify-content:center}
+.body-panel .wheel-frame{border-radius:0}
+.body-panel .metric-wheel{mask-image:linear-gradient(#0006,#000 36% 64%,#0006)}
 .lg-in{position:relative;z-index:1}
 .logo{font-size:clamp(26px,9vw,40px);letter-spacing:.06em}
 .logo b{background:linear-gradient(135deg,#fff,#d9ccff 60%,#ffb3d6);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -283,7 +290,7 @@ th,td{padding:10px 6px;border-bottom:1px solid var(--line)}
  .exercise-row.lifted .ex{box-shadow:var(--glow),0 0 0 3px color-mix(in srgb,var(--brand) 22%,transparent)}
 }
 /* кнопка входа по email — стеклянная, отличается от Apple */
-.sb.apple[data-stub="по email"]{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:none}
+.sb.apple#email-entry{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:none}
 </style>
 </head>
 <body>
@@ -299,7 +306,7 @@ th,td{padding:10px 6px;border-bottom:1px solid var(--line)}
    <button class="sb apple" data-stub="через Apple"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>Войти через Apple</button>
    <button class="sb fb" data-stub="через Facebook"><span class="gl" aria-hidden="true">f</span>Войти через Facebook</button>
    <button class="sb vk" data-stub="через VK ID"><span class="gl" aria-hidden="true">VK</span>Войти с VK ID</button>
-   <button class="sb apple" data-stub="по email">Вход/Регистрация по email</button>
+   <button class="sb apple" id="email-entry">Вход/Регистрация по email (демо)</button>
    <button class="sb guest" id="guest">Вход без регистрации</button>
    <p id="lh" role="status"></p>
   </div>
@@ -1079,13 +1086,14 @@ function render(){
   setA(true);show(false);S.tab="feed";render();window.scrollTo(0,0);
  }
  function start(){
-  if(bodyProfile){enter();return}
+  if(L.classList.contains("profile-step"))return;
   show(true);L.classList.add("profile-step");L.setAttribute("aria-label","Параметры тела");
   L.insertAdjacentHTML("beforeend",'<section class="body-panel"><h1>Параметры тела</h1><p>Укажите вес, рост и возраст. Позже их можно изменить в кабинете.</p>'+bodyForm(true)+'</section>');
   L.scrollTop=0;bindBody(L.querySelector(".body-form"),enter);
  }
  show(!authed());if(authed() && !bodyProfile)start();
  document.querySelectorAll("[data-stub]").forEach(function(b){b.onclick=function(){$("#lh").textContent="Вход "+b.dataset.stub+" пока не подключён: это визуальный макет. Нажмите «Вход без регистрации»."}});
+ $("#email-entry").onclick=start;
  $("#guest").onclick=start;
  window.logout=function(){setA(false);$("#lh").textContent="";show(true);L.scrollTop=0};
 })();
