@@ -742,7 +742,7 @@ function paintT(){
  $("#tb").textContent=T.phase==="idle"?(e.sets && c>=e.sets?"Начать заново":"Старт"):(T.id===null?"Продолжить":"Пауза");
  $("#tb").disabled=!e.sets;
  if(!e.sets)$("#tb").textContent="Добавьте первый подход";
- $("#set-add").disabled=T.phase!=="idle";
+ $("#set-add").disabled=T.id!==null;
  $("#sets").innerHTML=e.p.map(function(x,i){
   var cls=i<c?" on":(i===c&&T.phase==="work"?" cur":"");
   return '<div class="srow'+cls+'"><span>'+(i<c?"✓":i+1)+'</span><span style="flex:1"><b>'+kgl(x)+' × '+x.r+'</b> <span class="mute">'+(x.w?"разминка":"рабочий")+'</span></span><span class="mute">'+(i<e.sets-1?"отдых "+fm(restAfter(e,i+1)):"")+'</span><button class="chip" data-edit="'+i+'" aria-label="Изменить подход '+(i+1)+'" '+(T.phase==="idle"?"":"disabled")+'>Изменить</button></div>'}).join("");
@@ -774,8 +774,8 @@ function openEx(i){
   if(!list.open && !form.hidden){form.hidden=true;paintT()}
  };
  function editSet(index){
-  if(T.phase!=="idle")return;
   var adding=index===e.p.length;
+  if(adding?T.id!==null:T.phase!=="idle")return;
   var value=e.p[index] || e.p[index-1] || {kg:0,r:12,w:false};
   form.innerHTML='<div id="set-fields"><h3>'+(adding?"Новый подход":"Подход "+(index+1))+'</h3>'+
    '<label>Вес, кг (0 — свой вес)<input name="kg" type="number" required min="0" step="any"></label>'+
