@@ -99,9 +99,11 @@ var muscleGroups=[
 ];
 var guideExercises=Array.from(new Map(Object.values(DAYS).flatMap(function(day){
  return day.ex.map(function(ex){return [ex.n,ex]});
-})).values()).concat(guideExtraExercises, chestExercises, backExercises);
+})).values()).concat(guideExtraExercises, chestExercises, backExercises, legExercises);
 const exerciseSearchAliases = {
  ...chestSearchAliases,
+ "Присед": "Приседания со штангой",
+ "Разгибание ног сидя": "Разгибание ног в тренажёре сидя",
  "Тяга верхнего блока к груди": "Вертикальная тяга широким прямым хватом к груди",
  "Тяга гантели одной рукой с опорой": "Тяга гантели одной рукой на скамье",
  "Горизонтальная тяга в блоке широким хватом": "Горизонтальная тяга блока сидя широким хватом"
