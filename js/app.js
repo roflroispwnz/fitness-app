@@ -3,7 +3,7 @@ function renderTabs(){
  $("#tabrow").innerHTML=TABS.map(function(t){
   return '<button data-tab="'+t[0]+'"'+(S.tab===t[0]?' aria-current="page"':'')+'>'+svg(t[0])+t[1]+'</button>'}).join("");
  document.querySelectorAll("#tabrow button").forEach(function(b){
-  b.onclick=function(){guidePage=null;S.tab=b.dataset.tab;render();window.scrollTo(0,0)}});
+  b.onclick=function(){guidePage=null;S.tab=b.dataset.tab;render();pageScroller().scrollTo(0,0)}});
 }
 
 /* ---------- Роутер ---------- */
@@ -22,7 +22,7 @@ function render(){
  function enter(){
   var panel=L.querySelector(".body-panel");if(panel)panel.remove();
   L.classList.remove("profile-step");L.setAttribute("aria-label","Вход в Fitness Workspace");
-  setA(true);show(false);S.tab="feed";render();window.scrollTo(0,0);
+  setA(true);show(false);S.tab="feed";render();pageScroller().scrollTo(0,0);
  }
  function start(){
   if(L.classList.contains("profile-step"))return;

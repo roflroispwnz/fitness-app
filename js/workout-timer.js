@@ -1,8 +1,12 @@
 /* Таймер отдыха между подходами */
 var DEFAULT_REST_SECONDS=120;
 var WORK_REST_INCREMENT_SECONDS=15;
-var T={id:null,phase:"idle",left:0,restDuration:0,ex:null};
-function stopT(){clearInterval(T.id);T.id=null;T.phase="idle"}
+var T={id:null,phase:"idle",endsAt:0,remainingMs:0,restDuration:0,ex:null};
+function stopT(){clearInterval(T.id);T.id=null;T.endsAt=0;T.remainingMs=0;T.phase="idle"}
+function runRest(){
+ T.endsAt=Date.now()+T.remainingMs;
+ T.id=setInterval(tick,1000);
+}
 function fm(n){return Math.floor(n/60)+":"+("0"+n%60).slice(-2)}
 function buzz(p){if(navigator.vibrate)try{navigator.vibrate(p)}catch(x){}}
 function restSeconds(e){return e.restSeconds??DEFAULT_REST_SECONDS}
@@ -21,10 +25,11 @@ function paintT(){
  $("#rest-clock").hidden=!rest;
  if(rest){
   var clock=$("#time-value");
-  var accent=T.left<=30?"var(--bad)":T.left<=60?"var(--warm)":"var(--ok)";
-  clock.textContent=fm(T.left);
+  var left=Math.ceil(T.remainingMs/1000);
+  var accent=left<=30?"var(--bad)":left<=60?"var(--warm)":"var(--ok)";
+  clock.textContent=fm(left);
   clock.style.setProperty("--accent",accent);
-  clock.style.setProperty("--fill",(T.left/T.restDuration*100)+"%");
+  clock.style.setProperty("--fill",(left/T.restDuration*100)+"%");
  }
  $("#done-value").textContent=c+"/"+e.sets;
  $("#done-value").style.setProperty("--fill",(e.sets?c/e.sets*100:0)+"%");
@@ -37,22 +42,29 @@ function paintT(){
   var cls=i<c?" on":(i===c&&!rest?" cur":"");
   return '<div class="srow'+cls+'"><span>'+(i<c?"✓":i+1)+'</span><span style="flex:1"><b>'+kgl(x)+' × '+x.r+'</b> <span class="mute">'+(x.w?"разминка":"рабочий")+'</span></span><span class="mute">'+(!x.w && i<e.sets-1?"отдых "+fm(rest && i===c-1?T.restDuration:restAfter(e,i)):"")+'</span><button class="chip" data-edit="'+i+'" aria-label="Изменить подход '+(i+1)+'" '+(T.phase==="idle"?"":"disabled")+'>Изменить</button></div>'}).join("");
 }
+function syncRest(){
+ T.remainingMs=Math.max(0,T.endsAt-Date.now());
+ if(T.remainingMs===0){stopT();buzz([100,80,100])}
+}
 function tick(){
- T.left--;
- if(T.left<=0){stopT();buzz([100,80,100])}
+ if(T.id===null)return;
+ syncRest();
  paintT();
 }
+document.addEventListener("visibilitychange",function(){if(!document.hidden)tick()});
+window.addEventListener("pageshow",tick);
 function openEx(i){
  var e=workouts[S.day].ex[i];stopT();T.ex=i;
  var baseRest=restSeconds(e);
  var muscles=e.m.replace(/ · кг на каждую гантель$/i,"");
  $("#pane").innerHTML='<div class="row"><div><h2>'+esc(e.n)+'</h2><span class="tag">'+esc(muscles)+'</span></div><button class="btn ghost" id="close">Закрыть</button></div>'+
  vid(e)+
+ '<section class="card" id="timer"><h3 id="phase-title"></h3><div class="rings"><div><b id="rep-value"></b>Повторения</div><div id="rest-clock" hidden><b id="time-value"></b>Отдых</div><div><b id="done-value"></b>Выполнено</div></div></section>'+
+ '<div class="timer-actions"><button class="btn" id="tb"></button><button class="btn ghost" id="skip-rest" hidden>Закончить отдых</button></div>'+
  '<details id="set-list"><summary>План подходов · <span id="set-count">'+e.sets+' '+pl(e.sets,"подход","подхода","подходов")+'</span></summary>'+
- '<p class="mute" id="rest-help">После первого рабочего подхода отдых равен базовому, далее +'+WORK_REST_INCREMENT_SECONDS+' с за каждый рабочий подход, также вы можете настраивать отдых самостоятельно.</p>'+
- '<form id="rest-form" class="rest-form" aria-label="Базовый отдых" aria-describedby="rest-help"><div class="metric-values">'+wheelField("minutes","мин",Math.floor(baseRest/60),0,59)+wheelField("seconds","сек",baseRest%60,0,59)+'</div><button class="btn ghost">Сохранить отдых</button></form><p id="rest-status" class="mute rest-status" role="status"></p>'+
- '<div id="sets" style="margin:10px 0"></div><button type="button" class="btn ghost" id="set-add">Добавить подход</button><form class="card" id="set-form" hidden></form></details><section class="card" id="timer"><h3 id="phase-title"></h3><div class="rings"><div><b id="rep-value"></b>Повторения</div><div id="rest-clock" hidden><b id="time-value"></b>Отдых</div><div><b id="done-value"></b>Выполнено</div></div></section>'+
- '<div class="timer-actions"><button class="btn" id="tb"></button><button class="btn ghost" id="skip-rest" hidden>Закончить отдых</button></div>'+'<div class="card" style="margin-top:12px"><h2>Заметка тренеру</h2><p class="mute" style="margin-bottom:8px">Если вес или повторения отличались от плана, напишите.</p><div class="send"><input id="nt" placeholder="Например: 72,5 кг × 5, последний подход тяжело" aria-label="Заметка"><button class="btn" id="nts">Отправить</button></div></div>';
+ '<form id="rest-form" class="rest-form" aria-label="Базовый отдых"><div class="metric-values">'+wheelField("minutes","мин",Math.floor(baseRest/60),0,59)+wheelField("seconds","сек",baseRest%60,0,59)+'</div><button class="btn ghost">Сохранить отдых</button></form><p id="rest-status" class="mute rest-status" role="status"></p>'+
+ '<div id="sets" style="margin:10px 0"></div><button type="button" class="btn ghost" id="set-add">Добавить подход</button><form class="card" id="set-form" hidden></form></details>'+
+ '<div class="card" style="margin-top:12px"><h2>Заметка тренеру</h2><p class="mute" style="margin-bottom:8px">Если вес или повторения отличались от плана, напишите.</p><div class="send"><input id="nt" placeholder="Например: 72,5 кг × 5, последний подход тяжело" aria-label="Заметка"><button class="btn" id="nts">Отправить</button></div></div>';
  $("#sheet").classList.add("open");
  $("#close").onclick=closeEx;
  var form=$("#set-form");
@@ -150,8 +162,9 @@ function openEx(i){
  $("#tb").onclick=function(){
   if(T.phase==="rest"){
    if(T.id===null){
-    T.id=setInterval(tick,1000);
+    runRest();
    }else{
+    syncRest();
     clearInterval(T.id);
     T.id=null;
    }
@@ -164,8 +177,8 @@ function openEx(i){
   }else{
    S.done[key]=completed+1;
    if(S.done[key]<e.sets && !e.p[completed].w){
-    T.phase="rest";T.restDuration=restAfter(e,completed);T.left=T.restDuration;
-    T.id=setInterval(tick,1000);
+    T.phase="rest";T.restDuration=restAfter(e,completed);T.remainingMs=T.restDuration*1000;
+    runRest();
    }
   }
   paintT();

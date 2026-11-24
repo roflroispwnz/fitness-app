@@ -19,7 +19,7 @@ function vFeed(){
 function bindFeed(){
  document.querySelectorAll("[data-f]").forEach(function(b){b.onclick=function(){S.filter=b.dataset.f;render()}});
  document.querySelectorAll("[data-like]").forEach(function(b){b.onclick=function(){var i=b.dataset.like;S.liked[i]=!S.liked[i];render()}});
- document.querySelectorAll("[data-go]").forEach(function(b){b.onclick=function(){S.tab="train";S.day=dk(wdate(b.dataset.go));render();window.scrollTo(0,0)}});
+ document.querySelectorAll("[data-go]").forEach(function(b){b.onclick=function(){S.tab="train";S.day=dk(wdate(b.dataset.go));render();pageScroller().scrollTo(0,0)}});
  document.querySelectorAll("[data-cm]").forEach(function(b){b.onclick=function(){var i=b.dataset.cm;S.open[i]=!S.open[i];render()}});
  document.querySelectorAll("[data-cs]").forEach(function(b){
   var id=b.dataset.cs,inp=document.querySelector('[data-ci="'+id+'"]');

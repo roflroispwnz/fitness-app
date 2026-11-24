@@ -8,6 +8,9 @@ var S={
 };
 var USER={since:new Date(2025,10,20),end:new Date(2026,11,20)};
 var $=function(s){return document.querySelector(s)};
+function pageScroller(){
+ return window.matchMedia("(max-width:600px), (pointer:coarse)").matches ? $("#app") : document.scrollingElement;
+}
 var fmt=function(d){return d.toLocaleDateString("ru-RU")};
 var svg=function(n){return '<svg class="i" viewBox="0 0 24 24" aria-hidden="true">'+ICON[n]+'</svg>'};
 var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})};

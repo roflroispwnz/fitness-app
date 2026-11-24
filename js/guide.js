@@ -60,7 +60,7 @@ function bindFoodGuide(){
    foodProduct=null;render();
    var row=document.querySelector('[data-food-product="'+index+'"]');
    if(row)row.focus({preventScroll:true});
-   window.scrollTo(0,foodProductScroll);
+   pageScroller().scrollTo(0,foodProductScroll);
    return;
   }
   var category=foodCategory;
@@ -71,21 +71,21 @@ function bindFoodGuide(){
    var tile=document.querySelector('[data-food-category="'+category[0]+'"]');
    if(tile)tile.focus({preventScroll:true});
   }
-  window.scrollTo(0,category?foodGuideScroll:0);
+  pageScroller().scrollTo(0,category?foodGuideScroll:0);
  };
  var products=$(".food-product-list");
  if(products)products.onclick=function(event){
   var row=event.target.closest("[data-food-product]");
   if(!row)return;
-  foodProductScroll=window.scrollY;
+  foodProductScroll=pageScroller().scrollTop;
   foodProduct=Number(row.dataset.foodProduct);
-  render();window.scrollTo(0,0);
+  render();pageScroller().scrollTo(0,0);
  };
  document.querySelectorAll("[data-food-category]").forEach(function(tile){
   tile.onclick=function(){
-   foodGuideScroll=window.scrollY;
+   foodGuideScroll=pageScroller().scrollTop;
    foodCategory=foodCategories.find(function(category){return category[0]===tile.dataset.foodCategory});
-   render();window.scrollTo(0,0);
+   render();pageScroller().scrollTo(0,0);
   };
  });
 }
@@ -99,7 +99,13 @@ var muscleGroups=[
 ];
 var guideExercises=Array.from(new Map(Object.values(DAYS).flatMap(function(day){
  return day.ex.map(function(ex){return [ex.n,ex]});
-})).values()).concat(guideExtraExercises);
+})).values()).concat(guideExtraExercises, chestExercises, backExercises);
+const exerciseSearchAliases = {
+ ...chestSearchAliases,
+ "Тяга верхнего блока к груди": "Вертикальная тяга широким прямым хватом к груди",
+ "Тяга гантели одной рукой с опорой": "Тяга гантели одной рукой на скамье",
+ "Горизонтальная тяга в блоке широким хватом": "Горизонтальная тяга блока сидя широким хватом"
+};
 var exerciseThumbnails={
  "Гиперэкстензия":"hyperextension",
  "Присед":"squat",
@@ -137,7 +143,7 @@ function exerciseGuideResults(){
   }).join("")+'</div>';
  }
  var results=guideExercises.filter(function(ex){
-  var matches=(ex.n+" "+ex.m).toLocaleLowerCase("ru").replace(/ё/g,"е").includes(query);
+  var matches=(ex.n+" "+ex.m+" "+(exerciseSearchAliases[ex.n]||"")).toLocaleLowerCase("ru").replace(/ё/g,"е").includes(query);
   return matches && (!group || group[2].test(ex.m.toLocaleLowerCase("ru"))) &&
    (!exerciseGuide.savedOnly || savedExercises.has(ex.n)) && (!exerciseGuide.videoOnly || ex.video);
  });
@@ -156,8 +162,8 @@ function vExerciseDetail(ex){
   '<button type="button" class="exercise-guide-icon" id="exercise-guide-back" aria-label="К списку упражнений">'+svg("guideBack")+'</button>'+
   '<button type="button" class="exercise-guide-icon" id="exercise-detail-save" aria-label="В избранном" aria-pressed="'+savedExercises.has(ex.n)+'">'+svg("guideSave")+'</button></div>'+
   (id?'<div class="exercise-demo">'+demo+'<button type="button" class="chip" id="exercise-demo-toggle">Воспроизвести</button></div>':photo)+
-  '<h1>'+esc(ex.n)+'</h1><p class="mute">'+esc(ex.m)+'</p><p>'+esc(instruction[0])+'</p>'+
-  '<h2>Как выполнять</h2><ol class="exercise-steps">'+instruction.slice(1).map(function(step){return '<li><span>'+esc(step)+'</span></li>'}).join("")+'</ol></article>';
+  '<h1>'+esc(ex.n)+'</h1><p class="mute">'+esc(ex.m)+'</p>'+
+  (instruction?'<p>'+esc(instruction[0])+'</p><h2>Как выполнять</h2><ol class="exercise-steps">'+instruction.slice(1).map(function(step){return '<li><span>'+esc(step)+'</span></li>'}).join("")+'</ol>':'')+'</article>';
 }
 function bindExerciseDetail(ex){
  $("#exercise-guide-back").onclick=function(){
@@ -165,7 +171,7 @@ function bindExerciseDetail(ex){
   exerciseGuide.exercise=null;render();
   var row=document.querySelector('[data-guide-exercise="'+index+'"]');
   if(row)row.focus({preventScroll:true});
-  window.scrollTo(0,exerciseGuide.scroll);
+  pageScroller().scrollTo(0,exerciseGuide.scroll);
  };
  $("#exercise-detail-save").onclick=function(){
   if(savedExercises.has(ex.n))savedExercises.delete(ex.n);
@@ -196,7 +202,7 @@ function bindExerciseGuide(){
  if(exerciseGuide.exercise){bindExerciseDetail(exerciseGuide.exercise);return}
  var results=$("#exercise-guide-results");
  function updateResults(){results.innerHTML=exerciseGuideResults()}
- function openPage(){render();window.scrollTo(0,0)}
+ function openPage(){render();pageScroller().scrollTo(0,0)}
  $("#exercise-guide-back").onclick=function(){
   if(exerciseGuide.group)exerciseGuide.group=null;
   else guidePage=null;
@@ -215,7 +221,7 @@ function bindExerciseGuide(){
   if(group){exerciseGuide.group=muscleGroups.find(function(item){return item[0]===group.dataset.muscle});openPage();return}
   var button=event.target.closest("[data-guide-exercise]");
   if(!button)return;
-  exerciseGuide.scroll=window.scrollY;
+  exerciseGuide.scroll=pageScroller().scrollTop;
   exerciseGuide.exercise=guideExercises[Number(button.dataset.guideExercise)];
   openPage();
  };
@@ -237,7 +243,7 @@ function bindGuide(){
   exerciseGuide={group:null,query:"",savedOnly:false,videoOnly:false,exercise:null,scroll:0};
   Object.assign(nutritionGuide,{item:null,query:"",scroll:0,protein:null,proteinQuery:"",proteinScroll:0});
   foodCategory=null;foodGuideScroll=0;foodProduct=null;foodProductScroll=0;
-  render();window.scrollTo(0,0);
+  render();pageScroller().scrollTo(0,0);
  }});
- if($("#guide-back"))$("#guide-back").onclick=function(){guidePage=null;render();window.scrollTo(0,0)};
+ if($("#guide-back"))$("#guide-back").onclick=function(){guidePage=null;render();pageScroller().scrollTo(0,0)};
 }

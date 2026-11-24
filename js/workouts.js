@@ -96,7 +96,7 @@ function bindTrain(){
   }
   function placeRow(){
    var top=lastY-grabOffset;
-   row.style.transform="translateY("+(top+window.scrollY-originPageTop)+"px)";
+   row.style.transform="translateY("+(top+pageScroller().scrollTop-originPageTop)+"px)";
    var center=top+row.offsetHeight/2;
    clearMarker();
    target=0;
@@ -110,16 +110,16 @@ function bindTrain(){
   }
   function followPointer(){
    if(!row.isConnected || mode!=="move"){finish(false);return}
-   var edge=70, bottom=window.innerHeight-70;
+   var edge=70, bottom=pageScroller().clientHeight-70;
    var speed=lastY<edge?-Math.min(14,(edge-lastY)/4):Math.max(0,Math.min(14,(lastY-bottom)/4));
-   if(speed)window.scrollBy(0,speed);
+   if(speed)pageScroller().scrollBy(0,speed);
    placeRow();frame=requestAnimationFrame(followPointer);
   }
   function lift(){
    if(!start || !row.isConnected || mode!=="pending")return;
    dismissRow();mode="move";skipTap=true;
    var rect=row.getBoundingClientRect();
-   originPageTop=rect.top+window.scrollY;grabOffset=start.y-rect.top;
+   originPageTop=rect.top+pageScroller().scrollTop;grabOffset=start.y-rect.top;
    row.classList.add("lifted");frame=requestAnimationFrame(followPointer);
   }
   button.oncontextmenu=function(event){if(start || skipTap)event.preventDefault()};
@@ -141,7 +141,7 @@ function bindTrain(){
     mode=Math.abs(dy)>=Math.abs(dx)?"scroll":"swipe";
     if(mode==="swipe")track.classList.add("dragging");
    }
-   if(mode==="scroll" && event.pointerType!=="mouse")window.scrollBy(0,previousY-lastY);
+   if(mode==="scroll" && event.pointerType!=="mouse")pageScroller().scrollBy(0,previousY-lastY);
    if(mode==="swipe"){
     var offset=Math.max(-88,Math.min(0,(activeRow===row?-88:0)+dx));
     button.style.setProperty("--slide",offset+"px");

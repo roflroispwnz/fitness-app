@@ -11,5 +11,5 @@ function bindChat(){
   setTimeout(function(){S.chat.push({me:0,t:REPLIES[S.chat.length%REPLIES.length]});save("chat",S.chat);if(S.tab==="chat")render()},1200)}
  $("#go").onclick=send;
  $("#inp").onkeydown=function(e){if(e.key==="Enter")send()};
- window.scrollTo(0,document.body.scrollHeight);
+ pageScroller().scrollTo(0,pageScroller().scrollHeight);
 }
